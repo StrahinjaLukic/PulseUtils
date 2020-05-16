@@ -10,12 +10,20 @@ def get_module_list():
     return result.stdout.decode("utf-8")
 
 
-def get_module_strings(module_list_string):
-    module_strings = re.split(r'index: ([\d])', module_list_string)
-    return module_strings
+def split_module_strings(module_list_string):
+    module_strings = re.split(r'index: \d+', module_list_string)
+    n_mod_match = re.search(r'\d+', module_strings[0])
+    if n_mod_match is None:
+        raise ValueError('Number of loaded modules not present in module list string.')
+    n_mods = int(n_mod_match.group())
+    assert(n_mods == (len(module_strings) - 1))
+    return n_mods, module_strings[1:]
 
 
 if __name__ == "__main__":
-    mods = get_module_strings(get_module_list())
+    n_mods, mods = split_module_strings(get_module_list())
+    print('Found %d modules.' % n_mods)
+    # for modstr in
+    print(mods[0])
     print(mods[1])
     print(mods[2])
