@@ -5,7 +5,8 @@ import re
 
 def get_module_list():
     result = subprocess.run(commands.list_modules, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    print('Captured the list')
+    if result.returncode != 0:
+        raise RuntimeError(result.stderr.decode('utf-8'))
     return result.stdout.decode("utf-8")
 
 
