@@ -20,10 +20,19 @@ def split_module_strings(module_list_string):
     return n_mods, module_strings[1:]
 
 
+class PAModule:
+    @classmethod
+    def parse_module_string(cls, module_string):
+        pa_module = cls()
+        name_match = re.search(r'^\s+name:.*<(.+)>', module_string)
+        pa_module.name = name_match.group(1)
+        return pa_module
+
+
 if __name__ == "__main__":
     n_mods, mods = split_module_strings(get_module_list())
     print('Found %d modules.' % n_mods)
-    # for modstr in
-    print(mods[0])
-    print(mods[1])
-    print(mods[2])
+
+    modules = [PAModule.parse_module_string(modstr) for modstr in mods]
+    for module in modules:
+        print('Module name: ' + module.name)
